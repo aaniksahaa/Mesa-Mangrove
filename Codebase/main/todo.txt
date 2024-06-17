@@ -1,0 +1,1 @@
+- golpata stock should not be negative in any case, handle this 

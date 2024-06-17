@@ -1,0 +1,10 @@
+input parameters saved
+parameter differences calculated
+{'Fertilizer Cost': -58.333333333333336}
+
+
+41
+
+
+Output values saved at step 0
+Saved warning parameters to statistics/current_run/warnings/WARNINGLowCropProduction_20240617_183130.csv
