@@ -1,10 +1,20 @@
 input parameters saved
 parameter differences calculated
-{'Fertilizer Cost': -58.333333333333336}
+{}
 
 
 41
 
 
 Output values saved at step 0
-Saved warning parameters to statistics/current_run/warnings/WARNINGLowCropProduction_20240617_183130.csv
+Saved warning parameters to statistics/current_run/warnings/WARNINGHighFarmerDebt_20240702_221142.csv
+Saved warning parameters to statistics/current_run/warnings/WARNINGLowCropProduction_20240702_221142.csv
+Saved warning parameters to statistics/current_run/warnings/WARNINGLowGolpataStock_20240702_221142.csv
+Output values saved at step 10
+Saved warning parameters to statistics/current_run/warnings/WARNINGHighFishermenDebt_20240702_221147.csv
+Output values saved at step 20
+Output values saved at step 30
+Output values saved at step 40
+Output values saved at step 50
+Output values saved at step 60
+Output values saved at step 70

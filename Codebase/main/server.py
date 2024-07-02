@@ -61,7 +61,7 @@ class MyTextElement(TextElement):
         threshold_household_fishers_in_loan = 175
         threshold_farmers_in_loan = 75
         threshold_crop_production = 8
-        threshold_golpata_stock = 0
+        threshold_golpata_stock = 100
 
         warning_messages = []
 
@@ -88,8 +88,8 @@ class MyTextElement(TextElement):
             warning_messages.append("WARNING: Low Crop Production! Invest in agricultural infrastructure and technology, improve soil health, and support farmers with resources.")
 
         # Golpata Stock
-        # if data["Golpata Stock"].iloc[-1] < threshold_golpata_stock:
-        #     warning_messages.append("WARNING: Low Golpata Stock! Enforce stricter conservation measures, reforestation efforts, and regulate extraction activities.")
+        if data["Golpata Stock"].iloc[-1] < threshold_golpata_stock:
+            warning_messages.append("WARNING: Low Golpata Stock! Enforce stricter conservation measures, reforestation efforts, and regulate extraction activities.")
 
         return warning_messages
 
@@ -176,9 +176,9 @@ class MyTextElement(TextElement):
             text-align: center; 
         ">
             <h2 style="font-size: 1.4em; margin-bottom: 10px; color: #800000;">PRAGMATIC MEASURE</h2>
-            <div style="background-color: #fff5ee; padding: 10px; border: 1px solid #deb887; border-radius: 8px;">
+            <div style="height: 200px; background-color: #fff5ee; padding: 10px; border: 1px solid #deb887; border-radius: 8px;">
                 <h3 style="font-size: 1.1em; color: #a0522d;">Warnings for the concerned authority:</h3>
-                <ul style="list-style: none; padding: 0; font-size: 0.9em;">
+                <ul style="list-style: none; padding: 0; font-size: 0.86em;">
                     {restrict_forest_message}  
                 </ul>
             </div>
@@ -204,126 +204,39 @@ chart1 = mesa.visualization.ChartModule(
 
 chart2 = mesa.visualization.ChartModule(
     [
-        #{"Label": "Extraction Capacity", "Color": "#FF0000"},
         {"Label": "Catching Capacity Mangrove", "Color": "#00FF00"},
+    ],162
+)
+
+chart3 = mesa.visualization.ChartModule(
+    [
         {"Label": "Catching Capacity Household", "Color": "#FF0000"},
     ],162
 )
 
-chart6 = mesa.visualization.ChartModule(
-    [
-        {"Label": "Crop Production Capacity", "Color": "#0FF0FF"},
-    ]
-)
-
-chart3 = mesa.visualization.ChartModule(
+chart4 = mesa.visualization.ChartModule(
     [
         {"Label": "Mangrove Fishers in Loan", "Color": "#0F000F"},
     ]
 )
 
-chart4 = mesa.visualization.ChartModule(
+chart5 = mesa.visualization.ChartModule(
     [
         {"Label": "Household Fishers in Loan", "Color": "#F000FF"},
     ]
 )
 
-chart5 = mesa.visualization.ChartModule(
+chart6 = mesa.visualization.ChartModule(
     [
         {"Label": "Farmers in Loan", "Color": "#0F000F"},
     ]
 )
 
-
-
-# model_params = {
-#     "n_bawali": mesa.visualization.Slider(
-#         "Number of Bawalis",
-#         300,
-#         1,
-#         500,
-#         1,
-#         description="Choose the number of Bawalis",
-#     ),
-#     "n_mangrove_fisher": mesa.visualization.Slider(
-#         "Number of Mangrove Fishermen",
-#         300,
-#         1,
-#         500,
-#         1,
-#         description="Choose the number of Mangrove Fishermen",
-#     ),
-#     "n_household_fisher": mesa.visualization.Slider(
-#         "Number of Household Fishermen",
-#         300,
-#         1,
-#         500,
-#         1,
-#         description="Choose the number of Household Fishermen",
-#     ),
-#     "n_farmer": mesa.visualization.Slider(
-#         "Number of Farmers",
-#         300,
-#         1,
-#         500,
-#         1,
-#         description="Choose the number of Farmers",
-#     ),
-#     "covariance": mesa.visualization.Slider(
-#         "Covariance(%)",
-#         0.1,
-#         0.01,
-#         1,
-#         0.01,
-#         description="Choose how much agents differ from each other",
-#     ),
-#     "chosen_natural_hazard_loss": mesa.visualization.Slider(
-#         "Natural Hazard Loss of Golpata",
-#         75,
-#         1,
-#         300,
-#         1,
-#     ),
-#     "chosen_fertilizer_cost": mesa.visualization.Slider(
-#         "Fertilizer Cost",
-#         0.625,
-#         0,
-#         1.5,
-#         0.125,
-#     ),
-#     "chosen_land_crop_productivity": mesa.visualization.Slider(
-#         "Land Crop Productivity",
-#         20,
-#         5,
-#         30,
-#         1,
-#     ),
-#     "chosen_golpata_natural_growth_rate": mesa.visualization.Slider(
-#         "Golpata Natural Growth Rate",
-#         62.5,
-#         50,
-#         300,
-#         1,
-#     ),
-#     "chosen_golpata_conservation_growth_rate": mesa.visualization.Slider(
-#         "Golpata Conservation Growth Rate",
-#         137.5,
-#         50,
-#         300,
-#         1,
-#     ),
-
-# }
-
-
-# server = mesa.visualization.ModularServer(
-#     MangroveModel,
-#     [text,chart0,chart1,chart2,chart3,chart4,chart5,chart6],
-#     "Mangrove Model",
-#     model_params
-# )
-
-
+chart7 = mesa.visualization.ChartModule(
+    [
+        {"Label": "Crop Production Capacity", "Color": "#0FF0FF"},
+    ]
+)
 
 params = [
     {
@@ -415,8 +328,19 @@ params = [
         "max_value": 300,
         "step_size": 1,
         "description": "Conservation growth rate of Golpata"
-    }
+    },
 ]
+
+df = pd.read_csv('dataset/input_data/parameters.csv')
+columns = df.columns.tolist()
+
+final_params = []
+
+for param in params:
+    if(param['name'] not in columns):
+        final_params.append(param)
+
+params = final_params
 
 rotation_colors = ['green','red']
 model_params = {}
@@ -435,7 +359,7 @@ for index, param in enumerate(params):
 
 server = mesa.visualization.ModularServer(
     MangroveModel,
-    [text,chart1,chart2,chart3,chart4,chart5,chart6],
+    [text,chart1,chart2,chart3,chart4,chart5,chart6,chart7],
     "Mangrove Model",
     model_params
 )

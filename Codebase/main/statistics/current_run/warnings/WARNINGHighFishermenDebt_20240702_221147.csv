@@ -1,0 +1,19 @@
+,Value
+Golpata Extraction Capacity,37.50784104757244
+Catching Capacity Mangrove,2.263636952645498
+Catching Capacity Household,2.2101583654899106
+Crop Production Capacity,2.7925367482984793
+Mangrove Fishers in Loan,31.0
+Household Fishers in Loan,15.0
+Farmers in Loan,282.0
+Golpata Stock,250.95760576065368
+n_bawali,300.0
+n_mangrove_fisher,300.0
+n_household_fisher,300.0
+n_farmer,300.0
+covariance,0.1
+chosen_natural_hazard_loss,75.0
+chosen_fertilizer_cost,0.625
+chosen_land_crop_productivity,20.0
+chosen_golpata_natural_growth_rate,62.5
+chosen_golpata_conservation_growth_rate,137.5

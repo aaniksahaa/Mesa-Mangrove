@@ -2,6 +2,7 @@ import os
 import mesa
 import csv
 
+import numpy as np
 import pandas as pd 
 
 from config.global_variables import *
@@ -42,6 +43,8 @@ class MangroveModel(mesa.Model):
         self.parameter_differences = {}
         self.output_differences = {}
 
+        self.time_dependent_params = self.get_time_dependent_params()
+
         # initializations
         self.agent_count = 0
         self.n_bawali = 0
@@ -51,12 +54,13 @@ class MangroveModel(mesa.Model):
         self.days_from_start = 0
 
         # setting user-chosen parameters
+        self.covariance = covariance
+
         self.fertilizer_cost = chosen_fertilizer_cost
         self.natural_hazard_loss = chosen_natural_hazard_loss
         self.land_crop_productivity = chosen_land_crop_productivity
         self.golpata_conservation_growth_rate = chosen_golpata_conservation_growth_rate
         self.golpata_natural_growth_rate = chosen_golpata_natural_growth_rate
-        self.covariance = covariance
 
         self.now = datetime.strptime(start_date,"%Y-%m-%d")
 
@@ -96,7 +100,7 @@ class MangroveModel(mesa.Model):
                 "Mangrove Fishers in Loan": get_loan_fishermen_M,
                 "Household Fishers in Loan": get_loan_fishermen_H,
                 "Farmers in Loan": get_loan_farmer,
-                #"Golpata Stock": get_golpata_stock,
+                "Golpata Stock": get_golpata_stock,
             }
         )
         self.params = {
@@ -145,6 +149,21 @@ class MangroveModel(mesa.Model):
             f = Farmer(self.agent_count,self,farmer_capacities[i])
             self.schedule.add(f)
         self.n_farmer += n_farmer
+
+    def get_time_dependent_params(self):
+        df = pd.read_csv('dataset/input_data/parameters.csv')
+
+        input_csv_data = {}
+
+        columns = df.columns.tolist()
+
+        for c in columns:
+            data = df[c].tolist()
+            # value for default usage
+            mean_value = np.mean(np.array(data))
+            input_csv_data[c] = [data, mean_value]
+
+        return input_csv_data
 
     def generate_parameters_csv(self, filename):
         data = [
@@ -197,6 +216,50 @@ class MangroveModel(mesa.Model):
 
         self.parameter_differences = top_k_dict
 
+    def calculate_output_differences(self,data):
+        top_k = 3
+
+        current_values = data.iloc[-1]
+        previous_values = self.previous_output_values.loc[self.step_count]
+
+        # Transpose the DataFrames to have parameters as columns
+        current_values = current_values.transpose().reset_index()
+        previous_values = previous_values.transpose().reset_index()
+
+        # Rename columns for clarity
+        current_values.columns = ['parameter', 'value_current']
+        previous_values.columns = ['parameter', 'value_previous']
+
+        # Merge the two DataFrames on 'Parameter'
+        merged_df = pd.merge(previous_values, current_values, on='parameter')
+
+        merged_df['value_difference_pct'] = 100*(merged_df['value_current'] - merged_df['value_previous'])/merged_df['value_previous']
+
+        merged_df['absolute_difference_pct'] = merged_df['value_difference_pct'].abs()
+
+        filtered_df = merged_df[merged_df['absolute_difference_pct'] > 0]
+
+        sorted_df = filtered_df.sort_values(by='absolute_difference_pct', ascending=False)
+
+        top_k_parameters = sorted_df.head(top_k)
+
+        top_k_dict = top_k_parameters.set_index('parameter')['value_difference_pct'].to_dict()
+
+        self.output_differences = top_k_dict
+
+    def get_current_time_dependent_params(self, param_names):
+        values = {}
+        for param_name in param_names:
+            if param_name in self.time_dependent_params:
+                data = self.time_dependent_params[param_name]
+                if(self.step_count < len(data[0])):
+                    values[param_name] = data[0][self.step_count]
+                else:
+                    values[param_name] = data[1]
+            else:
+                values[param_name] = None
+        return values
+
     def initiate(self):
         run_log("\n\nModel constructor called\n\n")
 
@@ -221,6 +284,23 @@ class MangroveModel(mesa.Model):
         if(self.step_count == 0):
             self.initiate()
 
+        # update time dependent params
+
+        time_dependent_param_names = ['Natural Hazard Loss of Golpata', 'Fertilizer Cost', 'Land Crop Productivity', 'Golpata Natural Growth Rate', 'Golpata Conservation Growth Rate']
+
+        params = self.get_current_time_dependent_params(time_dependent_param_names)
+
+        if(params['Natural Hazard Loss of Golpata'] is not None):
+            self.natural_hazard_loss = params['Natural Hazard Loss of Golpata']
+        if(params['Fertilizer Cost'] is not None):
+            self.fertilizer_cost = params['Fertilizer Cost']
+        if(params['Land Crop Productivity'] is not None):
+            self.land_crop_productivity = params['Land Crop Productivity']
+        if(params['Golpata Natural Growth Rate'] is not None):
+            self.golpata_natural_growth_rate = params['Golpata Natural Growth Rate']
+        if(params['Golpata Conservation Growth Rate'] is not None):
+            self.golpata_conservation_growth_rate = params['Golpata Conservation Growth Rate']
+
         self.schedule.step()
         self.datacollector.collect(self)
         self.now += timedelta(days=span)
@@ -234,39 +314,14 @@ class MangroveModel(mesa.Model):
             # here we may apply policy
             self.golpata_permit = self.max_golpata_permit
             self.golpata_stock += self.golpata_natural_growth_rate - self.natural_hazard_loss
+        
+        if self.golpata_stock < 0:
+            self.golpata_stock = 0
 
         data = self.datacollector.get_model_vars_dataframe()
 
         if len(self.parameter_differences)>0 and len(data)>0 and (len(self.previous_output_values) > self.step_count ):
-            top_k = 3
-
-            current_values = data.iloc[-1]
-            previous_values = self.previous_output_values.loc[self.step_count]
-
-            # Transpose the DataFrames to have parameters as columns
-            current_values = current_values.transpose().reset_index()
-            previous_values = previous_values.transpose().reset_index()
-
-            # Rename columns for clarity
-            current_values.columns = ['parameter', 'value_current']
-            previous_values.columns = ['parameter', 'value_previous']
-
-            # Merge the two DataFrames on 'Parameter'
-            merged_df = pd.merge(previous_values, current_values, on='parameter')
-
-            merged_df['value_difference_pct'] = 100*(merged_df['value_current'] - merged_df['value_previous'])/merged_df['value_previous']
-
-            merged_df['absolute_difference_pct'] = merged_df['value_difference_pct'].abs()
-
-            filtered_df = merged_df[merged_df['absolute_difference_pct'] > 0]
-
-            sorted_df = filtered_df.sort_values(by='absolute_difference_pct', ascending=False)
-
-            top_k_parameters = sorted_df.head(top_k)
-
-            top_k_dict = top_k_parameters.set_index('parameter')['value_difference_pct'].to_dict()
-
-            self.output_differences = top_k_dict
+            self.calculate_output_differences(data)
 
         if(self.step_count % 10 == 0):
             data.to_csv("statistics/current_run/output_values.csv", index=False)

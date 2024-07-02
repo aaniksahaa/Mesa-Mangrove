@@ -1,0 +1,16 @@
+- trying to fit the output with obtained data 
+- fish stock
+- selective permissions for Bawalis 
+- Rouge/Pilferer population 
+- natural hazard loss may be different each year
+- occupation switching 
+- loan stock 
+- per season values
+- rogue agents 
+- equillibrium 
+- next year increase golpata
+- policy, intervention
+- mean, median, mode
+- current total loan 
+- after appying policy golpata stock should increase 
+- 10 yrs values as csv 
