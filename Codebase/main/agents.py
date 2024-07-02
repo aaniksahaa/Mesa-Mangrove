@@ -12,6 +12,7 @@ class Bawali(mesa.Agent):
         super().__init__(id, model)
         self.extraction_capacity = init_extraction_capacity
         self.type = Type.BAWALI
+        self.is_rouge = random.random() < 0.05
     def step(self):
 
         # print(self.extraction_capacity)
@@ -25,7 +26,7 @@ class Bawali(mesa.Agent):
         golpata_permit = self.model.golpata_permit
 
 
-        if(self.model.golpata_permit <= 0 or self.model.golpata_stock<=0 ):
+        if((self.model.golpata_permit <= 0  and not self.is_rouge ) or self.model.golpata_stock<=0 ):
             # no permission or no golpata, so no extraction performed
             if(self.extraction_capacity >= bawali_minimum_capacity):
                 self.extraction_capacity -= 10 # due to off permission
