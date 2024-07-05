@@ -1,0 +1,8 @@
+Model
+        Mangrove Model 
+
+Agents 
+        Bawali, Mangrove_Fisher, Household_Fisher, Farmer 
+        
+Rules 
+        Linear interaction equations

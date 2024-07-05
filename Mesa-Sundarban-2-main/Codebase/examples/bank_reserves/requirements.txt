@@ -1,0 +1,4 @@
+itertools
+mesa~=1.1
+numpy
+pandas

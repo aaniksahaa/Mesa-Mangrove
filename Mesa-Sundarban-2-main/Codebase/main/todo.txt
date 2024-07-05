@@ -1,0 +1,2 @@
+- golpata stock should not be negative in any case, handle this 
+- run with and without parameters given in the csv
