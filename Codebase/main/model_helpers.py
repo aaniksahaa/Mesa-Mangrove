@@ -1,5 +1,3 @@
-import mesa
-
 from config.global_variables import *
 from config.initial_parameters import *
 
@@ -7,50 +5,67 @@ def get_golpata_stock(model):
     return model.golpata_stock
 
 def get_extraction_capacity(model):
+    intended_occupation_name = 'Bawali'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.BAWALI):
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
             ans += agent.extraction_capacity
-    return ans/model.n_bawali
+    return ans/model.occupation_counts[intended_occupation_name]
 
 def get_catching_capacity_M(model):
+    intended_occupation_name = 'Mangrove_Fisher'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.MANGROVE_FISHER):
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
             ans += agent.catching_capacity
-    return ans/model.n_mangrove_fisher
+    return ans/model.occupation_counts[intended_occupation_name]
 
 def get_catching_capacity_H(model):
+    intended_occupation_name = 'Household_Fisher'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.HOUSEHOLD_FISHER):
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
             ans += agent.catching_capacity
-    return ans/model.n_household_fisher
+    return ans/model.occupation_counts[intended_occupation_name]
 
 def get_crop_production_capacity(model):
+    intended_occupation_name = 'Farmer'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.FARMER):
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
             ans += agent.crop_production_capacity
-    return ans/model.n_farmer
+    return ans/model.occupation_counts[intended_occupation_name]
 
 def get_loan_fishermen_M(model):
+    intended_occupation_name = 'Mangrove_Fisher'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.MANGROVE_FISHER):
-            ans += agent.inLoan
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
+            if agent.in_loan:
+                ans += 1
     return ans
 
 def get_loan_fishermen_H(model):
+    intended_occupation_name = 'Household_Fisher'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.HOUSEHOLD_FISHER):
-            ans += agent.inLoan
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
+            if agent.in_loan:
+                ans += 1
     return ans
 
 def get_loan_farmer(model):
+    intended_occupation_name = 'Farmer'
     ans = 0
     for agent in model.schedule.agents:
-        if(agent.type == Type.FARMER):
-            ans += agent.inLoan
+        current_occupation_name = agent.current_occupation().name
+        if(current_occupation_name == intended_occupation_name):
+            if agent.in_loan:
+                ans += 1
     return ans

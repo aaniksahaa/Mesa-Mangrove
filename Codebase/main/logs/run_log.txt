@@ -7,14 +7,18 @@ parameter differences calculated
 
 
 Output values saved at step 0
-Saved warning parameters to statistics/current_run/warnings/WARNINGHighFarmerDebt_20240702_224141.csv
-Saved warning parameters to statistics/current_run/warnings/WARNINGLowCropProduction_20240702_224141.csv
-Saved warning parameters to statistics/current_run/warnings/WARNINGLowGolpataStock_20240702_224141.csv
 Output values saved at step 10
-Saved warning parameters to statistics/current_run/warnings/WARNINGHighFishermenDebt_20240702_224144.csv
 Output values saved at step 20
 Output values saved at step 30
 Output values saved at step 40
 Output values saved at step 50
 Output values saved at step 60
 Output values saved at step 70
+Output values saved at step 80
+Output values saved at step 90
+Output values saved at step 100
+Output values saved at step 110
+Output values saved at step 120
+Output values saved at step 130
+here
+here

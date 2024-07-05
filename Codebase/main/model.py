@@ -11,7 +11,7 @@ from config.settings import *
 
 from model_helpers import *
 
-from agents import Bawali, Mangrove_Fisher, Household_Fisher, Farmer
+from agents import LivelihoodAgent
 
 from utils.normal_dist import get_normally_distributed_data
 from utils.beta_dist import get_beta_distributed_data
@@ -47,10 +47,19 @@ class MangroveModel(mesa.Model):
 
         # initializations
         self.agent_count = 0
-        self.n_bawali = 0
-        self.n_mangrove_fisher = 0
-        self.n_household_fisher = 0
-        self.n_farmer = 0
+
+        occupation_names = ['Bawali', 'Mangrove_Fisher', 'Household_Fisher', 'Farmer']
+
+        self.occupation_counts = {}
+
+        for occupation_name in occupation_names:
+            self.occupation_counts[occupation_name] = 0
+
+        # self.n_bawali = 0
+        # self.n_mangrove_fisher = 0
+        # self.n_household_fisher = 0
+        # self.n_farmer = 0
+
         self.days_from_start = 0
 
         # setting user-chosen parameters
@@ -103,11 +112,12 @@ class MangroveModel(mesa.Model):
                 "Golpata Stock": get_golpata_stock,
             }
         )
+
         self.params = {
-            "n_bawali": self.n_bawali,
-            "n_mangrove_fisher": self.n_mangrove_fisher,
-            "n_household_fisher": self.n_household_fisher,
-            "n_farmer": self.n_farmer,
+            "n_bawali": self.occupation_counts['Bawali'],
+            "n_mangrove_fisher": self.occupation_counts['Mangrove_Fisher'],
+            "n_household_fisher": self.occupation_counts['Household_Fisher'],
+            "n_farmer": self.occupation_counts['Farmer'],
             "covariance": self.covariance,
             "chosen_natural_hazard_loss": self.natural_hazard_loss,
             "chosen_fertilizer_cost": self.fertilizer_cost,
@@ -115,40 +125,43 @@ class MangroveModel(mesa.Model):
             "chosen_golpata_natural_growth_rate": self.golpata_natural_growth_rate,
             "chosen_golpata_conservation_growth_rate":self.golpata_conservation_growth_rate
         }    
-        
     
     # Add bawalis with beta-distributed characteristics
     def add_bawali(self,n_bawali):
         bawali_capacities = get_beta_distributed_data(init_extraction_capacity, self.covariance, n_bawali)
         for i in range(n_bawali):
             self.agent_count += 1
-            self.n_bawali += 1
-            b = Bawali(self.agent_count,self,bawali_capacities[i])
+            self.occupation_counts['Bawali'] += 1
+            b = LivelihoodAgent(self.agent_count,self)
+            b.init_bawali(bawali_capacities[i])
             self.schedule.add(b)
 
     def add_mangrove_fisher(self,n_mangrove_fisher):
         mangrove_fisher_capacities = get_beta_distributed_data(init_catching_capacity_M, self.covariance, n_mangrove_fisher)
         for i in range(n_mangrove_fisher):
             self.agent_count += 1
-            mf = Mangrove_Fisher(self.agent_count,self,mangrove_fisher_capacities[i])
+            self.occupation_counts['Mangrove_Fisher'] += 1
+            mf = LivelihoodAgent(self.agent_count,self)
+            mf.init_mangrove_fisher(mangrove_fisher_capacities[i])
             self.schedule.add(mf)
-        self.n_mangrove_fisher += n_mangrove_fisher
 
     def add_household_fisher(self,n_household_fisher):
         household_fisher_capacities = get_beta_distributed_data(init_catching_capacity_H,self.covariance,n_household_fisher)
         for i in range(n_household_fisher):
             self.agent_count += 1
-            hf = Household_Fisher(self.agent_count,self,household_fisher_capacities[i])
+            self.occupation_counts['Household_Fisher'] += 1
+            hf = LivelihoodAgent(self.agent_count,self)
+            hf.init_household_fisher(household_fisher_capacities[i])
             self.schedule.add(hf)
-        self.n_household_fisher += n_household_fisher
     
     def add_farmer(self,n_farmer):
         farmer_capacities = get_beta_distributed_data(init_crop_production_capacity,self.covariance,n_farmer)
         for i in range(n_farmer):
             self.agent_count += 1
-            f = Farmer(self.agent_count,self,farmer_capacities[i])
+            self.occupation_counts['Farmer'] += 1
+            f = LivelihoodAgent(self.agent_count,self)
+            f.init_farmer(farmer_capacities[i])
             self.schedule.add(f)
-        self.n_farmer += n_farmer
 
     def get_time_dependent_params(self):
         df = pd.read_csv('dataset/input_data/parameters.csv')
@@ -167,10 +180,10 @@ class MangroveModel(mesa.Model):
 
     def generate_parameters_csv(self, filename):
         data = [
-            ("Number of Bawalis", self.n_bawali),
-            ("Number of Mangrove Fishers", self.n_mangrove_fisher),
-            ("Number of Household Fishers", self.n_household_fisher),
-            ("Number of Farmers", self.n_farmer),
+            ("Number of Bawalis", self.occupation_counts['Bawali']),
+            ("Number of Mangrove Fishers", self.occupation_counts['Mangrove_Fisher']),
+            ("Number of Household Fishers", self.occupation_counts['Household_Fisher']),
+            ("Number of Farmers", self.occupation_counts['Farmer']),
             ("Covariance", self.covariance),
             ("Natural Hazard Loss", self.natural_hazard_loss),
             ("Fertilizer Cost", self.fertilizer_cost),
@@ -264,8 +277,8 @@ class MangroveModel(mesa.Model):
         run_log("\n\nModel constructor called\n\n")
 
         clear_logs()
-        copy_files('statistics/current_run', 'statistics/previous_run')
-        clear_folder('statistics/current_run/warnings')
+        #copy_files('statistics/current_run', 'statistics/previous_run')
+        #clear_folder('statistics/current_run/warnings')
         clear_folder('statistics/current_run')
 
         self.generate_parameters_csv("statistics/current_run/input_parameters.csv")
@@ -281,6 +294,8 @@ class MangroveModel(mesa.Model):
         run_log("\n\n" + str(len(self.previous_output_values)) + "\n\n")
 
     def step(self):
+        # print(f'at step {self.step_count}')
+
         if(self.step_count == 0):
             self.initiate()
 
@@ -302,6 +317,9 @@ class MangroveModel(mesa.Model):
             self.golpata_conservation_growth_rate = params['Golpata Conservation Growth Rate']
 
         self.schedule.step()
+
+        # print('steps run for all agents')
+
         self.datacollector.collect(self)
         self.now += timedelta(days=span)
         self.days_from_start += span

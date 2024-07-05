@@ -121,43 +121,11 @@ class MyTextElement(TextElement):
         # current output metrics
         data = model.datacollector.get_model_vars_dataframe()
 
-        # if len(data)>0 and (len(model.previous_output_values) > current_step - 1):
-        #     top_k = 5
-
-        #     current_values = data.iloc[-1]
-        #     previous_values = model.previous_output_values.loc[current_step-1]
-
-        #     # Transpose the DataFrames to have parameters as columns
-        #     current_values = current_values.transpose().reset_index()
-        #     previous_values = previous_values.transpose().reset_index()
-
-        #     # Rename columns for clarity
-        #     current_values.columns = ['parameter', 'value_current']
-        #     previous_values.columns = ['parameter', 'value_previous']
-
-        #     # Merge the two DataFrames on 'Parameter'
-        #     merged_df = pd.merge(previous_values, current_values, on='parameter')
-
-        #     merged_df['value_difference_pct'] = 100*(merged_df['value_current'] - merged_df['value_previous'])/merged_df['value_previous']
-
-        #     merged_df['absolute_difference_pct'] = merged_df['value_difference_pct'].abs()
-
-        #     filtered_df = merged_df[merged_df['absolute_difference_pct'] > 0]
-
-        #     sorted_df = filtered_df.sort_values(by='absolute_difference_pct', ascending=False)
-
-        #     top_k_parameters = sorted_df.head(top_k)
-
-        #     top_k_dict = top_k_parameters.set_index('parameter')['value_difference_pct'].to_dict()
-
-        #     run_log(f"output diff calc at step {current_step}")
-        #     run_log(top_k_dict)
-
         warning_messages = []
 
         if not data.empty:
             warning_messages = self.get_warning_messages(data)
-            self.save_warnings_as_csv(model,data,warning_messages)
+            # self.save_warnings_as_csv(model,data,warning_messages)
             
         if warning_messages:
             restrict_forest_message = "<br>".join(warning_messages)
