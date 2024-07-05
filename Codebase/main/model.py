@@ -1,8 +1,9 @@
 import os
+import random
 import mesa
 import csv
 
-import numpy as np
+import numpy as np 
 import pandas as pd 
 
 from config.global_variables import *
@@ -32,11 +33,12 @@ class MangroveModel(mesa.Model):
                  n_household_fisher=50,
                  n_farmer=50,
                  covariance=0.1,
-                 chosen_natural_hazard_loss=75,
-                 chosen_fertilizer_cost=0.625,
+                 chosen_natural_hazard_loss=natural_hazard_loss,
+                 chosen_fertilizer_cost=fertilizer_cost,
                  chosen_land_crop_productivity=20,
-                 chosen_golpata_natural_growth_rate=62.5,
-                 chosen_golpata_conservation_growth_rate=137.5,
+                 chosen_golpata_natural_growth_rate=golpata_natural_growth_rate,
+                 chosen_golpata_conservation_growth_rate=golpata_conservation_growth_rate,
+                 chosen_rogue_percentage=0.05,
                  start_date="2005-01-01"):
 
         self.step_count = 0
@@ -70,6 +72,7 @@ class MangroveModel(mesa.Model):
         self.land_crop_productivity = chosen_land_crop_productivity
         self.golpata_conservation_growth_rate = chosen_golpata_conservation_growth_rate
         self.golpata_natural_growth_rate = chosen_golpata_natural_growth_rate
+        self.rogue_percentage = chosen_rogue_percentage
 
         self.now = datetime.strptime(start_date,"%Y-%m-%d")
 
@@ -78,7 +81,7 @@ class MangroveModel(mesa.Model):
         # setting global parameters
         self.span = span 
 
-        self.golpata_stock = golpata_stock
+        self.golpata_stock = init_golpata_stock
         self.golpata_minimum = golpata_minimum
 
         self.bawali_minimum_capacity = bawali_minimum_capacity
@@ -89,7 +92,7 @@ class MangroveModel(mesa.Model):
         self.natural_hazard_loss_crops = natural_hazard_loss_crops
         self.extraction_control_efficiency = extraction_control_efficiency
         self.regulatory_efficiency = regulatory_efficiency
-        self.golpata_permit = golpata_permit
+        self.init_golpata_permit = init_golpata_permit
         self.crop_production_capacity_minimum = crop_production_capacity_minimum
         self.max_golpata_permit = max_golpata_permit
         
@@ -123,7 +126,8 @@ class MangroveModel(mesa.Model):
             "chosen_fertilizer_cost": self.fertilizer_cost,
             "chosen_land_crop_productivity": self.land_crop_productivity,
             "chosen_golpata_natural_growth_rate": self.golpata_natural_growth_rate,
-            "chosen_golpata_conservation_growth_rate":self.golpata_conservation_growth_rate
+            "chosen_golpata_conservation_growth_rate":self.golpata_conservation_growth_rate,
+            "chosen_rogue_percentage":self.rogue_percentage,
         }    
     
     # Add bawalis with beta-distributed characteristics
@@ -164,9 +168,14 @@ class MangroveModel(mesa.Model):
             self.schedule.add(f)
 
     def get_time_dependent_params(self):
-        df = pd.read_csv('dataset/input_data/parameters.csv')
-
         input_csv_data = {}
+
+        parameters_path = 'dataset/input_data/parameters.csv'
+
+        if not os.path.exists(parameters_path):
+            return input_csv_data
+        
+        df = pd.read_csv(parameters_path)
 
         columns = df.columns.tolist()
 
@@ -189,7 +198,8 @@ class MangroveModel(mesa.Model):
             ("Fertilizer Cost", self.fertilizer_cost),
             ("Land Crop Productivity", self.land_crop_productivity),
             ("Golpata Natural Growth Rate", self.golpata_natural_growth_rate),
-            ("Golpata Conservation Growth Rate", self.golpata_conservation_growth_rate)
+            ("Golpata Conservation Growth Rate", self.golpata_conservation_growth_rate),
+            ("Rogue Percentage", self.rogue_percentage),
         ]
 
         with open(filename, 'w', newline='') as file:
@@ -277,8 +287,8 @@ class MangroveModel(mesa.Model):
         run_log("\n\nModel constructor called\n\n")
 
         clear_logs()
-        #copy_files('statistics/current_run', 'statistics/previous_run')
         #clear_folder('statistics/current_run/warnings')
+        copy_files('statistics/current_run', 'statistics/previous_run')
         clear_folder('statistics/current_run')
 
         self.generate_parameters_csv("statistics/current_run/input_parameters.csv")
@@ -324,23 +334,53 @@ class MangroveModel(mesa.Model):
         self.now += timedelta(days=span)
         self.days_from_start += span
 
-        # Change in Golpata Stock
-        if(self.golpata_stock < self.golpata_minimum):
-            self.golpata_permit = 0
-            self.golpata_stock += self.golpata_natural_growth_rate + self.golpata_conservation_growth_rate - self.natural_hazard_loss
-        else:
-            # here we may apply policy
-            self.golpata_permit = self.max_golpata_permit
-            self.golpata_stock += self.golpata_natural_growth_rate - self.natural_hazard_loss
+        critical_situation = False
+
+        POLICY = 2
+
+        if POLICY == 1:
+            num_stages = 1
+            threshold_fractions = [0.25]
+            zero_permission_percentages = [0.2]
+            rest_permission_fractions = [0.2]
+
+        if POLICY == 2:
+            num_stages = 3
+            threshold_fractions = [0.25, 0.33, 0.5]
+            zero_permission_percentages = [0.5, 0.3, 0.1]
+            rest_permission_fractions = [0.1, 0.5, 0.8]
+
+        for i in range(num_stages):
+            if(self.golpata_stock < threshold_fractions[i]*init_golpata_stock):
+                for agent in self.schedule.agents:
+                    if(agent.original_occupation().name == 'Bawali'):
+                        random_indicator = random.random()  # from 0 to 1
+                        if random.random() < zero_permission_percentages[i]:
+                            agent.golpata_permit = 0
+                        else:
+                            agent.golpata_permit = self.max_golpata_permit*rest_permission_fractions[i]
+                self.golpata_stock += (self.golpata_natural_growth_rate + self.golpata_conservation_growth_rate - self.natural_hazard_loss)*golpata_rate_multiplier
+                critical_situation = True 
+                break
+
+        if not critical_situation:
+            for agent in self.schedule.agents:
+                if(agent.original_occupation().name == 'Bawali'):
+                    agent.golpata_permit = self.max_golpata_permit
+
+            self.golpata_stock += (self.golpata_natural_growth_rate - self.natural_hazard_loss)*golpata_rate_multiplier
+            
         
         if self.golpata_stock < 0:
             self.golpata_stock = 0
 
         data = self.datacollector.get_model_vars_dataframe()
-
+        
+        # calculating output differences
         if len(self.parameter_differences)>0 and len(data)>0 and (len(self.previous_output_values) > self.step_count ):
             self.calculate_output_differences(data)
 
+        # saving output values for future comparison
         if(self.step_count % 10 == 0):
             data.to_csv("statistics/current_run/output_values.csv", index=False)
             run_log(f"Output values saved at step {self.step_count}")

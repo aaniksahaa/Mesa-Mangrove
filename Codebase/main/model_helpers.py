@@ -2,7 +2,7 @@ from config.global_variables import *
 from config.initial_parameters import *
 
 def get_golpata_stock(model):
-    return model.golpata_stock
+    return max(model.golpata_stock,0)
 
 def get_extraction_capacity(model):
     intended_occupation_name = 'Bawali'

@@ -12,13 +12,4 @@ Output values saved at step 20
 Output values saved at step 30
 Output values saved at step 40
 Output values saved at step 50
-Output values saved at step 60
-Output values saved at step 70
-Output values saved at step 80
-Output values saved at step 90
-Output values saved at step 100
-Output values saved at step 110
-Output values saved at step 120
-Output values saved at step 130
-here
 here

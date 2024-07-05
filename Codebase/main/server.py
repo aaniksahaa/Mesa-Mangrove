@@ -1,9 +1,12 @@
+import os
 import mesa
 from model import MangroveModel  # Make sure to import the necessary model
 from mesa.visualization.modules import TextElement
 import datetime
 import pandas as pd
 import re
+
+from config.initial_parameters import *
 
 from utils.writer import run_log
 
@@ -157,11 +160,11 @@ class MyTextElement(TextElement):
 # Create text element to display model data
 text = MyTextElement()
 
-# chart0 = mesa.visualization.ChartModule(
-#     [
-#         {"Label": "Golpata Stock", "Color": "#0000FF"},
-#     ],162
-# )
+chart0 = mesa.visualization.ChartModule(
+    [
+        {"Label": "Golpata Stock", "Color": "#0000FF"},
+    ],162
+)
 
 chart1 = mesa.visualization.ChartModule(
     [
@@ -255,7 +258,7 @@ params = [
     {
         "variable_name": "chosen_natural_hazard_loss",
         "name": "Natural Hazard Loss of Golpata",
-        "initial_value": 75,
+        "initial_value": natural_hazard_loss,
         "min_value": 1,
         "max_value": 300,
         "step_size": 1,
@@ -264,7 +267,7 @@ params = [
     {
         "variable_name": "chosen_fertilizer_cost",
         "name": "Fertilizer Cost",
-        "initial_value": 0.625,
+        "initial_value": fertilizer_cost,
         "min_value": 0,
         "max_value": 1.5,
         "step_size": 0.125,
@@ -273,7 +276,7 @@ params = [
     {
         "variable_name": "chosen_land_crop_productivity",
         "name": "Land Crop Productivity",
-        "initial_value": 20,
+        "initial_value": land_crop_productivity,
         "min_value": 5,
         "max_value": 30,
         "step_size": 1,
@@ -282,8 +285,8 @@ params = [
     {
         "variable_name": "chosen_golpata_natural_growth_rate",
         "name": "Golpata Natural Growth Rate",
-        "initial_value": 62.5,
-        "min_value": 50,
+        "initial_value": golpata_natural_growth_rate,
+        "min_value": 1,
         "max_value": 300,
         "step_size": 1,
         "description": "Natural growth rate of Golpata"
@@ -291,16 +294,30 @@ params = [
     {
         "variable_name": "chosen_golpata_conservation_growth_rate",
         "name": "Golpata Conservation Growth Rate",
-        "initial_value": 137.5,
-        "min_value": 50,
+        "initial_value": golpata_conservation_growth_rate,
+        "min_value": 1,
         "max_value": 300,
         "step_size": 1,
         "description": "Conservation growth rate of Golpata"
     },
+    {
+        "variable_name": "chosen_rogue_percentage",
+        "name": "Rogue Percentage",
+        "initial_value": 0.05,
+        "min_value": 0,
+        "max_value": 1,
+        "step_size": 0.05,
+        "description": "Percentage of rogue population"
+    },
 ]
 
-df = pd.read_csv('dataset/input_data/parameters.csv')
-columns = df.columns.tolist()
+parameters_path = 'dataset/input_data/parameters.csv'
+
+columns = []
+
+if os.path.exists(parameters_path):
+    df = pd.read_csv(parameters_path)
+    columns = df.columns.tolist()
 
 final_params = []
 
@@ -327,7 +344,7 @@ for index, param in enumerate(params):
 
 server = mesa.visualization.ModularServer(
     MangroveModel,
-    [text,chart1,chart2,chart3,chart4,chart5,chart6,chart7],
+    [text,chart0,chart2,chart3,chart4,chart5,chart6,chart7],
     "Mangrove Model",
     model_params
 )

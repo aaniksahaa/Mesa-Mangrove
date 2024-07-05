@@ -10,10 +10,11 @@ elif(time_mode == Type.MONTH):
 
 multiplier = span/365
 
-# Independent of Time Mode
+golpata_rate_multiplier = 100  # not sure
 
-golpata_stock = 4000
-golpata_minimum = 200
+# Independent of Time Mode
+init_golpata_stock = 113888
+golpata_minimum = init_golpata_stock * 0.4
 
 # Dependent on Time Mode
 
@@ -21,9 +22,9 @@ golpata_minimum = 200
 bawali_minimum_capacity = 40*multiplier
 movement_cost_bawali = 14.75*multiplier
 
-golpata_conservation_growth_rate = 137.5*multiplier 
-golpata_natural_growth_rate = 62.5*multiplier 
-natural_hazard_loss = 75*multiplier 
+golpata_conservation_growth_rate = 137.5*multiplier
+golpata_natural_growth_rate = 80*multiplier
+natural_hazard_loss = 75*multiplier
 
 ice_cost = 0.375*multiplier 
 movement_cost_fishermen_M = 0.3125*multiplier 
@@ -32,10 +33,10 @@ natural_hazard_loss_crops = 0.75*multiplier
 fertilizer_cost = 0.625*multiplier 
 extraction_control_efficiency = 3 
 regulatory_efficiency = 1.5
-golpata_permit = 125*multiplier
 crop_production_capacity_minimum = 1*multiplier
 land_crop_productivity = 20*multiplier # 8
-max_golpata_permit = 125*multiplier
+max_golpata_permit = 150*multiplier
+init_golpata_permit = 150*multiplier
 
 # agent initialization parameters
 init_extraction_capacity = 40*multiplier  # 50

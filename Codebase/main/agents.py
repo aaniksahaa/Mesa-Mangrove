@@ -18,10 +18,12 @@ class LivelihoodAgent(mesa.Agent):
         self.catching_capacity = 0
         self.crop_production_capacity = 0
 
+        self.golpata_permit = model.init_golpata_permit
+
         self.occupations = []
         
         # TODO change this
-        self.is_rouge = random.random() < 0.05
+        self.is_rouge = random.random() < model.rogue_percentage
 
         self.in_loan = False 
         # self.loan_amount = 0
@@ -99,6 +101,11 @@ class LivelihoodAgent(mesa.Agent):
         if not self.occupations:
             return None
         return self.occupations[-1]
+    
+    def original_occupation(self):
+        if not self.occupations:
+            return None
+        return self.occupations[0]
 
     def step(self):
         self.current_occupation().step()

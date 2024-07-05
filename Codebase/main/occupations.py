@@ -20,17 +20,13 @@ class Bawali(Occupation):
         agent = self.agent
         model = self.agent.model
 
-        bawali_minimum_capacity = model.bawali_minimum_capacity
-        movement_cost_bawali = model.movement_cost_bawali
-        golpata_permit = model.golpata_permit
-
-        if((model.golpata_permit <= 0  and not agent.is_rouge ) or model.golpata_stock<=0 ):
+        if((agent.golpata_permit <= 0  and not agent.is_rouge ) or model.golpata_stock<=0 ):
             # no permission or no golpata, so no extraction performed
             # has enough extraction capacity
-            if(agent.extraction_capacity >= bawali_minimum_capacity):
+            if(agent.extraction_capacity >= model.bawali_minimum_capacity):
                 agent.extraction_capacity -= 10 # due to off permission
         # if they do not have the minimum capacity
-        elif(agent.extraction_capacity < bawali_minimum_capacity):
+        elif(agent.extraction_capacity < model.bawali_minimum_capacity):
             # not enough extraction_capacity, so no extraction performed
 
             # swicth occupation for one year
@@ -39,10 +35,12 @@ class Bawali(Occupation):
             agent.extraction_capacity += 2 # by fishing or farming during the next year
         else:
             # extraction performed
-            actual_extraction_amount = min(golpata_permit , agent.extraction_capacity)
+            actual_extraction_amount = min(agent.golpata_permit , agent.extraction_capacity)
+
             # taking into account the movement cost 
-            new_actual_extraction_amount = actual_extraction_amount - movement_cost_bawali
+            new_actual_extraction_amount = actual_extraction_amount - model.movement_cost_bawali
             agent.extraction_capacity += 0.01*new_actual_extraction_amount
+
             # modifying total golpata_stock
             model.golpata_stock -= actual_extraction_amount
 
@@ -54,12 +52,8 @@ class Mangrove_Fisher(Occupation):
         agent = self.agent
         model = self.agent.model
 
-        # needed parameters
-        movement_cost_fishermen_M = model.movement_cost_fishermen_M
-        ice_cost = model.ice_cost
-
         # taking into account the cost
-        actual_catching_capacity = agent.catching_capacity - movement_cost_fishermen_M - ice_cost
+        actual_catching_capacity = agent.catching_capacity - model.movement_cost_fishermen_M - model.ice_cost
         
         if(actual_catching_capacity <= 0):
             agent.in_loan = 1
@@ -131,10 +125,7 @@ class Household_Fisher(Occupation):
         agent = self.agent
         model = self.agent.model
 
-        # needed parameters
-        production_cost_fish = model.production_cost_fish
-
-        actual_catching_capacity = agent.catching_capacity - production_cost_fish
+        actual_catching_capacity = agent.catching_capacity - model.production_cost_fish
         if(actual_catching_capacity <= 0):
             agent.in_loan = 1
             agent.catching_capacity += 0.2  # takes loan # 0.1
@@ -178,14 +169,8 @@ class Farmer(Occupation):
         agent = self.agent
         model = self.agent.model
 
-        # needed parameters
-        crop_production_capacity_minimum = model.crop_production_capacity_minimum
-        land_crop_productivity = model.land_crop_productivity
-        natural_hazard_loss_crops = model.natural_hazard_loss_crops
-        fertilizer_cost = model.fertilizer_cost
-
-        if(agent.crop_production_capacity >= crop_production_capacity_minimum):
-            actual_crop_productivity = land_crop_productivity - natural_hazard_loss_crops
+        if(agent.crop_production_capacity >= model.crop_production_capacity_minimum):
+            actual_crop_productivity = model.land_crop_productivity - model.natural_hazard_loss_crops
 
             actual_crop_production = 0
 
@@ -195,11 +180,11 @@ class Farmer(Occupation):
                 actual_crop_production = agent.crop_production_capacity
             
             if(actual_crop_productivity > 15):
-                agent.crop_production_capacity += 0.1*(actual_crop_production - fertilizer_cost)
+                agent.crop_production_capacity += 0.1*(actual_crop_production - model.fertilizer_cost)
             elif(actual_crop_productivity < 10):
-                agent.crop_production_capacity = actual_crop_production - fertilizer_cost
+                agent.crop_production_capacity = actual_crop_production - model.fertilizer_cost
             else:
-                agent.crop_production_capacity += 0.05*(actual_crop_production - fertilizer_cost)
+                agent.crop_production_capacity += 0.05*(actual_crop_production - model.fertilizer_cost)
             
         now_capacity = agent.crop_production_capacity
 

@@ -4,8 +4,9 @@ Number of Mangrove Fishers,300
 Number of Household Fishers,300
 Number of Farmers,300
 Covariance,0.1
-Natural Hazard Loss,75
+Natural Hazard Loss,75.0
 Fertilizer Cost,0.625
-Land Crop Productivity,20
-Golpata Natural Growth Rate,62.5
+Land Crop Productivity,20.0
+Golpata Natural Growth Rate,80.0
 Golpata Conservation Growth Rate,137.5
+Rogue Percentage,0.05
