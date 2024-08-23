@@ -29,8 +29,10 @@ class Bawali(Occupation):
         elif(agent.extraction_capacity < model.bawali_minimum_capacity):
             # not enough extraction_capacity, so no extraction performed
 
-            # swicth occupation for one year
+            # switch occupation for one year
             agent.switch_to_occupation(Farmer(agent, 1))
+
+            print('switched')
             
             agent.extraction_capacity += 2 # by fishing or farming during the next year
         else:

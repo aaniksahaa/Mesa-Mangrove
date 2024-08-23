@@ -22,15 +22,15 @@ golpata_minimum = init_golpata_stock * 0.4
 bawali_minimum_capacity = 40*multiplier
 movement_cost_bawali = 14.75*multiplier
 
-golpata_conservation_growth_rate = 137.5*multiplier
-golpata_natural_growth_rate = 80*multiplier
+golpata_conservation_growth_rate = 125*multiplier
+golpata_natural_growth_rate = 62.5*multiplier
 natural_hazard_loss = 75*multiplier
 
 ice_cost = 0.375*multiplier 
-movement_cost_fishermen_M = 0.3125*multiplier 
-production_cost_fish = 0.625*multiplier 
+movement_cost_fishermen_M = 0.375*multiplier 
+production_cost_fish = 0.5*multiplier 
 natural_hazard_loss_crops = 0.75*multiplier 
-fertilizer_cost = 0.625*multiplier 
+fertilizer_cost = 0.75*multiplier 
 extraction_control_efficiency = 3 
 regulatory_efficiency = 1.5
 crop_production_capacity_minimum = 1*multiplier

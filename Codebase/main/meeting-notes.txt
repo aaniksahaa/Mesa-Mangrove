@@ -5,11 +5,11 @@
 - natural hazard loss may be different each year
 - occupation switching 
 - loan stock 
-- per season values
+- per season values 
 - rogue agents 
 - equillibrium 
 - next year increase golpata
-- policy, intervention
+- policy, intervention 
 - mean, median, mode
 - current total loan 
 - after appying policy golpata stock should increase 

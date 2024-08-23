@@ -39,7 +39,10 @@ class MangroveModel(mesa.Model):
                  chosen_golpata_natural_growth_rate=golpata_natural_growth_rate,
                  chosen_golpata_conservation_growth_rate=golpata_conservation_growth_rate,
                  chosen_rogue_percentage=0.05,
+                 policy = 'Policy 1',
                  start_date="2005-01-01"):
+        
+        self.policy = policy 
 
         self.step_count = 0
         self.parameter_differences = {}
@@ -113,6 +116,7 @@ class MangroveModel(mesa.Model):
                 "Household Fishers in Loan": get_loan_fishermen_H,
                 "Farmers in Loan": get_loan_farmer,
                 "Golpata Stock": get_golpata_stock,
+                "Current Bawali Count": get_current_bawali_count
             }
         )
 
@@ -336,15 +340,21 @@ class MangroveModel(mesa.Model):
 
         critical_situation = False
 
-        POLICY = 2
+        POLICY = self.policy
 
-        if POLICY == 1:
+        if POLICY == 'Policy 1':
             num_stages = 1
             threshold_fractions = [0.25]
             zero_permission_percentages = [0.2]
             rest_permission_fractions = [0.2]
 
-        if POLICY == 2:
+        if POLICY == 'Policy 2':
+            num_stages = 2
+            threshold_fractions = [0.25, 0.5]
+            zero_permission_percentages = [0.5, 0.1]
+            rest_permission_fractions = [0.1, 0.8]
+
+        if POLICY == 'Policy 3':
             num_stages = 3
             threshold_fractions = [0.25, 0.33, 0.5]
             zero_permission_percentages = [0.5, 0.3, 0.1]

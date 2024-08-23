@@ -1,6 +1,13 @@
 from config.global_variables import *
 from config.initial_parameters import *
 
+def get_current_bawali_count(model):
+    c = 0
+    for agent in model.schedule.agents:
+        if(agent.current_occupation().name == 'Bawali'):
+            c += 1
+    return c 
+
 def get_golpata_stock(model):
     return max(model.golpata_stock,0)
 

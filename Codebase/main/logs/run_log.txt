@@ -1,9 +1,9 @@
 input parameters saved
 parameter differences calculated
-{}
+{'Rogue Percentage': 100.0}
 
 
-71
+161
 
 
 Output values saved at step 0
@@ -12,4 +12,14 @@ Output values saved at step 20
 Output values saved at step 30
 Output values saved at step 40
 Output values saved at step 50
-here
+Output values saved at step 60
+Output values saved at step 70
+Output values saved at step 80
+Output values saved at step 90
+Output values saved at step 100
+Output values saved at step 110
+Output values saved at step 120
+Output values saved at step 130
+Output values saved at step 140
+Output values saved at step 150
+Output values saved at step 160

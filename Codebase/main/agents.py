@@ -26,7 +26,6 @@ class LivelihoodAgent(mesa.Agent):
         self.is_rouge = random.random() < model.rogue_percentage
 
         self.in_loan = False 
-        # self.loan_amount = 0
 
     def init_bawali(self,init_extraction_capacity):
         self.extraction_capacity = init_extraction_capacity

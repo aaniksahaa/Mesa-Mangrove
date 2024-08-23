@@ -1,6 +1,12 @@
 year_no,Natural Hazard Loss of Golpata,Fertilizer Cost,Land Crop Productivity,Golpata Natural Growth Rate,Golpata Conservation Growth Rate
+2015,200,0.6,5,50,100
+2016,300,0.7,10,100,150
+2017,100,0.8,20,75,125
+2018,50,1.2,18,200,250
+2019,350,0.5,25,250,300
 2020,200,0.6,5,50,100
 2021,300,0.7,10,100,150
 2022,100,0.8,20,75,125
 2023,50,1.2,18,200,250
 2024,350,0.5,25,250,300
+

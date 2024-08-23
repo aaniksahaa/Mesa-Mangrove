@@ -118,6 +118,13 @@ class MyTextElement(TextElement):
                 combined_df.to_csv(filename)
                 run_log(f"Saved warning parameters to {filename}")
 
+    def get_current_bawali_count(self, model):
+        c = 0
+        for agent in model.schedule.agents:
+            if(agent.current_occupation().name == 'Bawali'):
+                c += 1
+        return c 
+
     def render(self, model):
         current_step = model.step_count
 
@@ -135,6 +142,8 @@ class MyTextElement(TextElement):
         else:
             restrict_forest_message = ""  # Clear the message if no warnings
 
+        bc = self.get_current_bawali_count(model)
+
         # Regal HTML Output
         return f"""
         {self.get_table_html("Input Parameter",model.parameter_differences)}
@@ -148,6 +157,7 @@ class MyTextElement(TextElement):
         ">
             <h2 style="font-size: 1.4em; margin-bottom: 10px; color: #800000;">PRAGMATIC MEASURE</h2>
             <div style="height: 200px; background-color: #fff5ee; padding: 10px; border: 1px solid #deb887; border-radius: 8px;">
+                <h3> Current Bawalis: {str(bc)} </h3>
                 <h3 style="font-size: 1.1em; color: #a0522d;">Warnings for the concerned authority:</h3>
                 <ul style="list-style: none; padding: 0; font-size: 0.86em;">
                     {restrict_forest_message}  
@@ -206,6 +216,12 @@ chart6 = mesa.visualization.ChartModule(
 chart7 = mesa.visualization.ChartModule(
     [
         {"Label": "Crop Production Capacity", "Color": "#0FF0FF"},
+    ]
+)
+
+chart8 = mesa.visualization.ChartModule(
+    [
+        {"Label": "Current Bawali Count", "Color": "#0F000F"},
     ]
 )
 
@@ -341,10 +357,14 @@ for index, param in enumerate(params):
         description=param["description"]+";"+color
     )
 
-
+model_params["policy"] = mesa.visualization.Choice(
+        'Applied Policy',
+        value='Policy 1',
+        choices=['Policy 1', 'Policy 2', 'Policy 3']
+    )
 server = mesa.visualization.ModularServer(
     MangroveModel,
-    [text,chart0,chart2,chart3,chart4,chart5,chart6,chart7],
+    [text,chart0,chart2,chart3,chart4,chart5,chart6,chart7,chart8],
     "Mangrove Model",
     model_params
 )
