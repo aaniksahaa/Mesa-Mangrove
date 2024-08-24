@@ -1,0 +1,146 @@
+Golpata Stock
+
+
+Generated Latex for Golpata Stock
+
+
+Mean & 35624.8651 & 31208.7536 & 27733.6701\\
+Median & 32325.3422 & 28805.0953 & 24948.836\\
+Min & 20598.2953 & 14215.46 & 19005.7267\\
+Max & 107152.5044 & 107610.034 & 107801.7825\\
+Range & 86554.209 & 93394.574 & 88796.0558\\
+Standard Deviation & 15940.7834 & 14944.4626 & 13738.182\\      
+Variance & 254108575.0407 & 223336962.3542 & 188737644.4254\\   
+Interquartile Range (IQR) & 11735.3982 & 9305.9252 & 6770.0344\\
+Skewness & 2.9198 & 3.434 & 4.2391\\
+Kurtosis & 8.9076 & 12.715 & 18.8583\\
+First Quartile & 26050.9369 & 23021.591 & 21667.501\\
+Third Quartile & 37786.3352 & 32327.5161 & 28437.5354\\
+MAD (Mean Absolute Deviation) & 9116.403 & 7952.189 & 6444.7891\\
+Coefficient of Variation & 0.4475 & 0.4789 & 0.4954\\
+
+Catching Capacity Mangrove
+
+
+Generated Latex for Catching Capacity Mangrove
+
+
+Mean & 2.2771 & 2.252 & 2.2205\\
+Median & 2.276 & 2.2518 & 2.22\\
+Min & 2.2621 & 2.2349 & 2.206\\
+Max & 2.2942 & 2.2837 & 2.2689\\
+Range & 0.0321 & 0.0487 & 0.0629\\
+Standard Deviation & 0.0077 & 0.0091 & 0.0091\\
+Variance & 0.0001 & 0.0001 & 0.0001\\
+Interquartile Range (IQR) & 0.0108 & 0.0123 & 0.0096\\
+Skewness & 0.2139 & 0.4313 & 1.8206\\
+Kurtosis & -0.6061 & 0.4298 & 7.2231\\
+First Quartile & 2.2718 & 2.2453 & 2.2152\\
+Third Quartile & 2.2826 & 2.2575 & 2.2248\\
+MAD (Mean Absolute Deviation) & 0.0064 & 0.0072 & 0.0064\\
+Coefficient of Variation & 0.0034 & 0.004 & 0.0041\\
+
+Catching Capacity Household
+
+
+Generated Latex for Catching Capacity Household
+
+
+Mean & 2.5076 & 2.4814 & 2.4536\\
+Median & 2.5091 & 2.4845 & 2.4538\\
+Min & 2.4046 & 2.3533 & 2.3774\\
+Max & 2.5337 & 2.5106 & 2.4778\\
+Range & 0.1291 & 0.1573 & 0.1004\\
+Standard Deviation & 0.0167 & 0.0191 & 0.0137\\
+Variance & 0.0003 & 0.0004 & 0.0002\\
+Interquartile Range (IQR) & 0.0135 & 0.0194 & 0.0139\\
+Skewness & -2.6482 & -3.379 & -1.9721\\
+Kurtosis & 13.4601 & 19.3402 & 8.8336\\
+First Quartile & 2.5026 & 2.4733 & 2.4477\\
+Third Quartile & 2.5162 & 2.4927 & 2.4616\\
+MAD (Mean Absolute Deviation) & 0.0107 & 0.0122 & 0.0095\\
+Coefficient of Variation & 0.0066 & 0.0077 & 0.0056\\
+
+Crop Production Capacity
+
+
+Generated Latex for Crop Production Capacity
+
+
+Mean & 0.6286 & 0.5486 & 0.5069\\
+Median & 0.4097 & 0.3306 & 0.2854\\
+Min & 0.1888 & 0.114 & 0.1133\\
+Max & 4.4186 & 4.4423 & 4.4802\\
+Range & 4.2298 & 4.3282 & 4.3669\\
+Standard Deviation & 0.5803 & 0.5956 & 0.5933\\
+Variance & 0.3368 & 0.3547 & 0.352\\
+Interquartile Range (IQR) & 0.4892 & 0.474 & 0.4066\\
+Skewness & 3.4208 & 3.4524 & 3.72\\
+Kurtosis & 17.2051 & 17.3052 & 19.2826\\
+First Quartile & 0.2825 & 0.1963 & 0.1863\\
+Third Quartile & 0.7717 & 0.6704 & 0.5929\\
+MAD (Mean Absolute Deviation) & 0.3833 & 0.3902 & 0.3772\\
+Coefficient of Variation & 0.9232 & 1.0857 & 1.1704\\
+
+Mangrove Fishers in Loan
+
+
+Generated Latex for Mangrove Fishers in Loan
+
+
+Mean & 76.38 & 115.04 & 163.92\\
+Median & 77.0 & 121.0 & 173.0\\
+Min & 30 & 33 & 35\\
+Max & 92 & 132 & 188\\
+Range & 62 & 99 & 153\\
+Standard Deviation & 9.4375 & 19.9509 & 30.1359\\
+Variance & 89.0663 & 398.0388 & 908.1754\\
+Interquartile Range (IQR) & 5.0 & 12.25 & 12.25\\
+Skewness & -2.4032 & -2.504 & -2.6483\\
+Kurtosis & 8.8637 & 5.9933 & 6.5702\\
+First Quartile & 75.0 & 113.75 & 166.0\\
+Third Quartile & 80.0 & 126.0 & 178.25\\
+MAD (Mean Absolute Deviation) & 5.6744 & 12.6424 & 18.6248\\
+Coefficient of Variation & 0.1236 & 0.1734 & 0.1838\\
+
+Household Fishers in Loan
+
+
+Generated Latex for Household Fishers in Loan
+
+
+Mean & 0.71 & 2.3 & 3.71\\
+Median & 1.0 & 2.0 & 4.0\\
+Min & 0 & 0 & 0\\
+Max & 3 & 6 & 6\\
+Range & 3 & 6 & 6\\
+Standard Deviation & 0.7693 & 1.4599 & 1.6955\\
+Variance & 0.5918 & 2.1313 & 2.8746\\
+Interquartile Range (IQR) & 1.0 & 2.0 & 2.0\\
+Skewness & 0.6781 & 0.8202 & -0.6019\\
+Kurtosis & -0.5528 & -0.0181 & -0.6374\\
+First Quartile & 0.0 & 1.0 & 3.0\\
+Third Quartile & 1.0 & 3.0 & 5.0\\
+MAD (Mean Absolute Deviation) & 0.6674 & 1.12 & 1.428\\
+Coefficient of Variation & 1.0835 & 0.6347 & 0.457\\
+
+Farmers in Loan
+
+
+Generated Latex for Farmers in Loan
+
+
+Mean & 18.43 & 35.23 & 64.89\\
+Median & 18.0 & 36.5 & 66.0\\
+Min & 0 & 0 & 0\\
+Max & 35 & 51 & 93\\
+Range & 35 & 51 & 93\\
+Standard Deviation & 5.7739 & 8.7176 & 15.6049\\
+Variance & 33.3385 & 75.9971 & 243.513\\
+Interquartile Range (IQR) & 5.0 & 8.0 & 15.0\\
+Skewness & -0.3382 & -1.9118 & -2.0382\\
+Kurtosis & 2.371 & 5.9321 & 6.8233\\
+First Quartile & 16.0 & 32.0 & 59.0\\
+Third Quartile & 21.0 & 40.0 & 74.0\\
+MAD (Mean Absolute Deviation) & 4.0786 & 5.9132 & 9.8432\\
+Coefficient of Variation & 0.3133 & 0.2474 & 0.2405\\
