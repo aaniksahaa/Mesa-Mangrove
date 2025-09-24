@@ -1,9 +1,0 @@
-
-
-Major Updates 
-
-- Inputting time-dependent values as csv 
-- Inclusion of Rogue population 
-- Provision of restricting a certain number of Bawalis  
-- Switching professions for a certain duration and then switching back 
-- Policy interventions and the effect 
